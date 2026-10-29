@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전생 동물 연구소</title>
+<style>
+:root {
+  --site-primary: #8C65D9;
+  --site-secondary: #32204F;
+  --site-background: #100B1E;
+  --site-on-primary: #FFFFFF;
+  --site-on-secondary: #F4ECFF;
+  --site-on-background: #F7F0FF;
+  --site-font-body: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+  --site-font-heading: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin:0; background: light-dark(#f8f5ff, #100b1e); color: light-dark(#25183a, #f7f0ff); font-family:var(--site-font-body); }
+#app { min-height:100vh; width:100%; border-radius:0; overflow:hidden; background-color:light-dark(#f8f5ff, var(--site-background)); color:light-dark(#25183a, var(--site-on-background)); position:relative; isolation:isolate; }
+#app::before, #app::after { content:""; position:absolute; z-index:-1; pointer-events:none; opacity:var(--site-decoration-opacity); border-radius:50%; filter:blur(3px); }
+#app::before { width:440px;height:440px;top:80px;left:-190px;background:radial-gradient(circle,rgba(154,108,255,.18),transparent 68%); }
+#app::after { width:500px;height:500px;top:480px;right:-220px;background:radial-gradient(circle,rgba(106,75,193,.16),transparent 70%); }
+header { max-width:1120px; margin:auto; padding:24px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.brand { display:flex; align-items:center; gap:11px; letter-spacing:.02em; font-weight:800; }
+.brand-mark { width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#c9a8ff,#7450bf);display:grid;place-items:center;box-shadow:0 8px 28px #8c65d944;color:white;font-size:20px; }
+.nav-tag { border:1px solid light-dark(#ded0f5,#4a3865); border-radius:999px;padding:9px 14px;font-size:12px;letter-spacing:.12em;color:light-dark(#6f5894,#c9b5ee); }
+main { max-width:1120px; margin:auto; padding:38px 28px 80px; }
+.hero { text-align:center; padding:28px 0 40px; }
+.eyebrow { display:inline-flex;align-items:center;gap:9px;color:#c6a8ff;font-size:12px;letter-spacing:.2em;text-transform:uppercase; }
+.eyebrow:before,.eyebrow:after { content:"";width:24px;height:1px;background:#8c65d9; }
+h1 { font-family:var(--site-font-heading);font-size:clamp(34px,5.3vw,66px);line-height:1.2;letter-spacing:-.055em;margin:22px 0 16px;font-weight:850; }
+h1 span { display:block;background:linear-gradient(90deg,#c7a8ff,#fff0d8,#a88cff);-webkit-background-clip:text;background-clip:text;color:transparent; }
+.lede { color:light-dark(#76678d,#b9abc9);font-size:15px;line-height:1.9;max-width:590px;margin:0 auto; }
+.stars { color:#a98bdf;letter-spacing:1.3em;font-size:11px;margin-top:24px;opacity:.85; }
+.layout { display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch; }
+.panel { border:1px solid light-dark(#e4d8f5,#3a2a50);background:light-dark(#ffffffc9,#1a1228d9);border-radius:calc(28px * var(--site-radius-scale));padding:24px;box-shadow:0 22px 80px #09041025;backdrop-filter:blur(12px); }
+.panel-top { display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px; }
+.panel-kicker { font-size:11px;letter-spacing:.16em;color:#a88bda;font-weight:800; }
+.live { display:flex;align-items:center;gap:7px;font-size:11px;color:light-dark(#8a7b9d,#b8a6cc); }
+.dot { width:7px;height:7px;border-radius:50%;background:#a58aff;box-shadow:0 0 12px #a58aff; }
+.camera { min-height:310px;border-radius:20px;overflow:hidden;position:relative;background:radial-gradient(ellipse at 50% 35%,#463269 0,#201532 50%,#100b1e 100%);display:flex;align-items:center;justify-content:center;border:1px solid #594273; }
+.camera video { display:none;width:100%;height:100%;min-height:310px;object-fit:cover;transform:scaleX(-1); }
+.camera.active video { display:block; }
+.camera.active .camera-placeholder { display:none; }
+.camera-placeholder { padding:30px;text-align:center; }
+.orb { width:108px;height:108px;border-radius:50%;margin:0 auto 20px;border:1px solid #bba0f5aa;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#8e70b5,#3d285b 58%,#21142f);box-shadow:0 0 0 12px #bda0f50a,0 0 50px #a98bdf22;position:relative; }
+.orb:before,.orb:after { content:"✦";position:absolute;color:#d9c8ff;font-size:15px; }
+.orb:before { top:-11px;right:3px; }.orb:after{bottom:2px;left:-12px;font-size:10px;}
+.orb svg { width:56px;height:56px;opacity:.92; }
+.camera-placeholder h3 { font-size:17px;margin:0 0 8px; }
+.camera-placeholder p { color:#b7a5cc;font-size:12px;line-height:1.7;margin:0; }
+.camera-actions { display:flex;gap:10px;margin-top:15px;flex-wrap:wrap; }
+button { font:inherit;cursor:pointer;border:0;transition:transform .18s ease,filter .18s ease,background .18s ease; }
+button:hover { filter:brightness(1.08);transform:translateY(-1px); }
+button:focus-visible { outline:3px solid #d7c4ff;outline-offset:3px; }
+.primary { flex:1;min-width:190px;background:linear-gradient(110deg,#9c79e7,#7651c3);color:white;padding:15px 18px;border-radius:14px;font-size:14px;font-weight:750;box-shadow:0 10px 28px #7752c344; }
+.secondary { background:light-dark(#f1eafa,#2a1d3d);color:light-dark(#715395,#dfd0f8);padding:14px 16px;border-radius:14px;font-size:13px;border:1px solid light-dark(#e4d7f4,#48335f); }
+.notice { margin:13px 2px 0;color:light-dark(#8b7d9c,#9787aa);font-size:11px;line-height:1.7; }
+.status { margin-top:13px;font-size:12px;line-height:1.6;color:#bda7e8;min-height:18px; }
+.result-panel { display:flex;flex-direction:column; }
+.result-stage { flex:1;min-height:260px;border-radius:20px;background:linear-gradient(145deg,light-dark(#f5efff,#241735),light-dark(#eee5fc,#171020));border:1px solid light-dark(#e5d8f5,#3e2c53);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;position:relative;overflow:hidden; }
+.result-stage:before { content:"";position:absolute;width:240px;height:240px;border:1px solid #a78ae533;border-radius:50%; }
+.result-stage:after { content:"";position:absolute;width:180px;height:180px;border:1px dashed #a78ae544;border-radius:50%; }
+.result-icon { font-size:58px;position:relative;z-index:1;filter:drop-shadow(0 0 18px #b99bff44); }
+.result-label { position:relative;z-index:1;font-size:11px;letter-spacing:.18em;color:#a88bda;margin:18px 0 9px; }
+.result-title { position:relative;z-index:1;font-size:clamp(26px,3vw,36px);letter-spacing:-.04em;font-weight:850;margin:0 0 10px; }
+.result-copy { position:relative;z-index:1;font-size:12px;line-height:1.8;color:light-dark(#847495,#b5a5c6);max-width:290px;margin:0; }
+.meters { width:100%;position:relative;z-index:1;margin-top:22px;text-align:left; }
+.meter-row { display:flex;justify-content:space-between;font-size:11px;color:light-dark(#78658f,#c6b5d8);margin:12px 0 7px; }
+.track {height:5px;border-radius:10px;background:light-dark(#e5daf3,#382747);overflow:hidden;}
+.fill {height:100%;width:0%;border-radius:10px;background:linear-gradient(90deg,#8d65d5,#d1b9ff);transition:width .35s ease;}
+.result-note { margin-top:14px;font-size:11px;color:light-dark(#8b7d9c,#9c8bac);line-height:1.7; }
+.bottom { margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px; }
+.mini { padding:19px 20px;border-radius:19px;border:1px solid light-dark(#e5d9f3,#3a2a4d);background:light-dark(#ffffff9c,#1a1227a6); }
+.mini-icon {font-size:18px;margin-bottom:11px;}
+.mini strong {display:block;font-size:13px;margin-bottom:7px;}
+.mini p {font-size:11px;line-height:1.7;color:light-dark(#837393,#a999b8);margin:0;}
+footer {text-align:center;color:light-dark(#9a8bab,#756583);font-size:10px;letter-spacing:.08em;padding:30px 15px 38px;}
+@media (max-width:760px) { header{padding:18px 18px;}main{padding:18px 16px 50px}.layout{grid-template-columns:1fr}.hero{padding:28px 0 30px}.panel{padding:18px}.bottom{grid-template-columns:1fr}.camera{min-height:280px}.camera video{min-height:280px}.nav-tag{font-size:10px}.lede{font-size:13px;} }
+@media (prefers-reduced-motion:reduce) { *{scroll-behavior:auto!important;transition:none!important;} }
+</style>
+</head>
+<body>
+<div id="app" data-sites-preview-theme="custom">
+<header>
+  <div class="brand"><div class="brand-mark">✧</div><span>AFTERLIFE ANIMAL LAB</span></div>
+  <div class="nav-tag">SOUL ARCHIVE · No. 024</div>
+</header>
+<main>
+  <section class="hero">
+    <div class="eyebrow">A MYSTICAL SELF DISCOVERY</div>
+    <h1>전생에 나는<br><span>수달이였을까 족제비였을까?</span></h1>
+    <p class="lede">오래된 별빛 아래, 얼굴에 남겨진 전생의 흔적을 읽어 봅니다.<br>카메라를 켜고 당신의 영혼과 가장 닮은 동물을 만나 보세요.</p>
+    <div class="stars">✦ · · ✧ · · ✦</div>
+  </section>
+  <section class="layout">
+    <div class="panel">
+      <div class="panel-top"><div class="panel-kicker">01 / SOUL SCANNER</div><div class="live"><span class="dot"></span> CAMERA PORTAL</div></div>
+      <div class="camera" id="camera">
+        <video id="video" autoplay playsinline muted></video>
+        <div class="camera-placeholder">
+          <div class="orb">
+            <svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M13 27c1-10 8-17 19-17s18 7 19 17l3 18c.5 4-3 7-7 5l-8-5H25l-8 5c-4 2-7.5-1-7-5l3-18Z" stroke="#E9DFFF" stroke-width="1.6"/><path d="M22 30h.1M42 30h.1M26 40c4 3 8 3 12 0" stroke="#E9DFFF" stroke-width="3" stroke-linecap="round"/><path d="M27 21c2-2 8-2 10 0" stroke="#BBA0F5" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3>영혼의 초점을 맞춰 주세요</h3>
+          <p>정면을 바라보고 얼굴이 화면 중앙에 오도록<br>준비한 뒤 스캔을 시작하세요.</p>
+        </div>
+      </div>
+      <div class="camera-actions">
+        <button class="primary" id="startBtn">✧ &nbsp; 전생 스캔 시작하기</button>
+        <button class="secondary" id="stopBtn" hidden>카메라 끄기</button>
+      </div>
+      <div class="status" id="status" role="status">카메라 권한을 허용하면 분석이 시작됩니다.</div>
+      <p class="notice">카메라 영상은 이 화면에서 모델 분석에 사용됩니다. 실제 얼굴 인식이나 신원 확인이 아니라, 학습된 이미지 분류 모델을 이용한 재미용 테스트입니다.</p>
+    </div>
+    <div class="panel result-panel">
+      <div class="panel-top"><div class="panel-kicker">02 / YOUR PAST LIFE</div><div class="live">✧ ORACLE READING</div></div>
+      <div class="result-stage">
+        <div class="result-icon" id="resultIcon">☾</div>
+        <div class="result-label" id="resultLabel">THE ORACLE IS ASLEEP</div>
+        <h2 class="result-title" id="resultTitle">아직 운명이 열리지 않았어요</h2>
+        <p class="result-copy" id="resultCopy">스캔을 시작하면 수달과 족제비 중 어떤 이미지에 더 가까운지 확인할 수 있어요.</p>
+        <div class="meters">
+          <div class="meter-row"><span>🦦 수달의 기운</span><span id="otterPct">—</span></div><div class="track"><div class="fill" id="otterBar"></div></div>
+          <div class="meter-row"><span>🦡 족제비의 기운</span><span id="weaselPct">—</span></div><div class="track"><div class="fill" id="weaselBar"></div></div>
+        </div>
+      </div>
+      <p class="result-note" id="resultNote">별의 배열은 기다리고 있습니다. 카메라를 켜면 결과가 여기에 나타납니다.</p>
+    </div>
+  </section>
+  <section class="bottom">
+    <div class="mini"><div class="mini-icon">☽</div><strong>수달의 영혼</strong><p>호기심과 유연함, 물결처럼 주변과 조화를 이루는 타입.</p></div>
+    <div class="mini"><div class="mini-icon">✧</div><strong>족제비의 영혼</strong><p>재빠른 관찰력과 영리함, 작은 틈도 발견하는 탐험가 타입.</p></div>
+    <div class="mini"><div class="mini-icon">𖤓</div><strong>별빛 판독 안내</strong><p>결과는 학습 모델의 이미지 분류값입니다. 진짜 전생이나 성격을 증명하지 않아요.</p></div>
+  </section>
+</main>
+<footer>AFTERLIFE ANIMAL LAB · MADE OF MOONLIGHT & CURIOSITY</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script>
+(() => {
+  const MODEL_URL = "https://teachablemachine.withgoogle.com/models/QMeEojSLl/";
+  const camera = document.getElementById("camera");
+  const video = document.getElementById("video");
+  const startBtn = document.getElementById("startBtn");
+  const stopBtn = document.getElementById("stopBtn");
+  const status = document.getElementById("status");
+  let model = null, stream = null, running = false, frameId = null, busy = false;
+  let labels = [];
+  const $ = id => document.getElementById(id);
+  function setStatus(message) { status.textContent = message; }
+  function setMeter(kind, value) {
+    $(kind + "Pct").textContent = Math.round(value * 100) + "%";
+    $(kind + "Bar").style.width = Math.round(value * 100) + "%";
+  }
+  function resetResult() {
+    $("resultIcon").textContent = "☾";
+    $("resultLabel").textContent = "THE ORACLE IS ASLEEP";
+    $("resultTitle").textContent = "아직 운명이 열리지 않았어요";
+    $("resultCopy").textContent = "스캔을 시작하면 수달과 족제비 중 어떤 이미지에 더 가까운지 확인할 수 있어요.";
+    $("resultNote").textContent = "별의 배열은 기다리고 있습니다. 카메라를 켜면 결과가 여기에 나타납니다.";
+    setMeter("otter", 0); setMeter("weasel", 0);
+  }
+  function normLabel(s) { return String(s).toLowerCase().replace(/\s/g, ""); }
+  function updateResult(predictions) {
+    const findClass = terms => predictions.find(p => terms.some(t => normLabel(p.className).includes(t)));
+    const otter = findClass(["수달","otter"]);
+    const weasel = findClass(["족제비","weasel","ferret","marten"]);
+    if (!otter || !weasel) {
+      const best = [...predictions].sort((a,b) => b.probability-a.probability)[0];
+      $("resultIcon").textContent = "✧";
+      $("resultLabel").textContent = "MODEL CLASSIFICATION";
+      $("resultTitle").textContent = best ? best.className : "분류 결과를 기다리는 중";
+      $("resultCopy").textContent = "모델에서 반환한 분류 결과입니다. 수달·족제비 클래스 이름을 찾지 못해 원본 라벨을 표시하고 있어요.";
+      $("resultNote").textContent = "모델 라벨: " + predictions.map(p=>p.className).join(", ");
+      predictions.forEach(p => console.log("Model class:", p.className, p.probability));
+      return;
+    }
+    const sum = otter.probability + weasel.probability || 1;
+    const op = otter.probability / sum, wp = weasel.probability / sum;
+    setMeter("otter", op); setMeter("weasel", wp);
+    if (Math.abs(op-wp) < .08) {
+      $("resultIcon").textContent = "☯";
+      $("resultLabel").textContent = "A SOUL BETWEEN WORLDS";
+      $("resultTitle").textContent = "두 세계의 경계에 있어요";
+      $("resultCopy").textContent = "수달과 족제비의 이미지가 비슷하게 감지됐어요. 조명과 각도를 바꿔 다시 확인해 보세요.";
+      $("resultNote").textContent = "모델의 두 클래스 점수를 합산해 비교한 값입니다.";
+    } else if (op > wp) {
+      $("resultIcon").textContent = "🦦";
+      $("resultLabel").textContent = "OTTER SOUL AWAKENED";
+      $("resultTitle").textContent = "전생은 수달이었을지도!";
+      $("resultCopy").textContent = "물결처럼 유연하고 호기심 많은 수달의 이미지에 더 가까워요. 오늘의 별빛은 장난기와 다정함을 가리키네요.";
+      $("resultNote").textContent = "수달 " + Math.round(op*100) + "% · 족제비 " + Math.round(wp*100) + "% — 재미로 보는 이미지 분류 결과예요.";
+    } else {
+      $("resultIcon").textContent = "🦡";
+      $("resultLabel").textContent = "WEASEL SOUL AWAKENED";
+      $("resultTitle").textContent = "전생은 족제비였을지도!";
+      $("resultCopy").textContent = "날렵하고 영리한 족제비의 이미지에 더 가까워요. 오늘의 별빛은 재치와 탐험심을 가리키네요.";
+      $("resultNote").textContent = "수달 " + Math.round(op*100) + "% · 족제비 " + Math.round(wp*100) + "% — 재미로 보는 이미지 분류 결과예요.";
+    }
+  }
+  async function start() {
+    startBtn.disabled = true;
+    startBtn.textContent = "별빛을 불러오는 중…";
+    setStatus("AI 모델을 불러오고 카메라 권한을 확인하고 있어요.");
+    try {
+      if (!window.tmImage) throw new Error("AI 라이브러리를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.");
+      if (!model) {
+        model = await tmImage.load(MODEL_URL + "model.json", MODEL_URL + "metadata.json");
+        labels = model.getClassLabels();
+      }
+      stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false});
+      video.srcObject = stream;
+      await video.play();
+      camera.classList.add("active");
+      running = true;
+      stopBtn.hidden = false;
+      startBtn.textContent = "✧ 스캔 중…";
+      setStatus("스캔 중이에요. 얼굴을 화면 중앙에 두고 잠시 기다려 주세요.");
+      loop();
+    } catch (err) {
+      console.error(err);
+      const msg = err && err.name === "NotAllowedError" ? "카메라 권한이 거부됐어요. 브라우저 주소창의 카메라 권한을 확인해 주세요." :
+        err && err.name === "NotFoundError" ? "사용할 수 있는 카메라를 찾지 못했어요." :
+        (err && err.message) || "카메라를 시작하지 못했어요. HTTPS 또는 localhost 환경에서 다시 시도해 주세요.";
+      setStatus(msg);
+      startBtn.disabled = false;
+      startBtn.textContent = "다시 시도하기";
+    }
+  }
+  async function loop() {
+    if (!running || busy) return;
+    if (video.readyState >= 2 && model) {
+      busy = true;
+      try {
+        const predictions = await model.predict(video);
+        updateResult(predictions);
+      } catch (err) {
+        console.error(err);
+        setStatus("이미지를 분석하지 못했어요. 카메라를 다시 시작해 주세요.");
+        stop();
+        return;
+      } finally { busy = false; }
+    }
+    if (running) frameId = requestAnimationFrame(loop);
+  }
+  function stop() {
+    running = false;
+    if (frameId) cancelAnimationFrame(frameId);
+    if (stream) stream.getTracks().forEach(track => track.stop());
+    stream = null; video.srcObject = null;
+    camera.classList.remove("active");
+    stopBtn.hidden = true;
+    startBtn.disabled = false;
+    startBtn.textContent = "✧ 전생 스캔 시작하기";
+    setStatus("카메라가 꺼졌어요. 원할 때 다시 스캔할 수 있습니다.");
+  }
+  startBtn.addEventListener("click", start);
+  stopBtn.addEventListener("click", stop);
+  window.addEventListener("pagehide", stop);
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    setStatus("이 환경에서는 카메라를 사용할 수 없어요. HTTPS 또는 localhost에서 열어 주세요.");
+  }
+})();
+</script>
+</body>
+</html>
